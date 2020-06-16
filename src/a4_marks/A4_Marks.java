@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class A4_Marks {
 
     private static final Scanner x = new Scanner(System.in); // makes scanner availble in all methods
-    static void menu(){
+    static void mainMenu(){
         System.out.println("\nOption 1: Add Names and Marks");
         System.out.println("Option 2: Print List");
         System.out.println("Option 3: Delete Names and Marks");
@@ -38,6 +38,31 @@ public class A4_Marks {
         
         return answer;  
     } //adds mark to arraylist
+    static Integer Max(ArrayList<Integer> mark){
+        int answer = mark.get(0);
+        for(int i=1;i<mark.size();i++){
+            if (mark.get(i)>answer){
+                answer = mark.get(i);
+            }
+        }
+        return answer;
+    } //finds max value
+    static Integer Min(ArrayList<Integer> mark){
+        int answer = mark.get(0);
+        for(int i=1;i<mark.size();i++){
+            if (mark.get(i)<answer){
+                answer = mark.get(i);
+            }
+        }
+        return answer;
+    } //finds min value
+    static Integer Sum(ArrayList<Integer> mark){
+        int answer=0;
+        for (int i=0;i<mark.size();i++){
+                answer=(mark.get(i))+answer;
+            }
+        return answer;
+    } //gets the sum of all marks
     static Integer Average (int avg,int amount){
         int answer;
         
@@ -67,6 +92,11 @@ public class A4_Marks {
         
         return answer;
     } //Prints # of * a mark has
+    static void deleteMenu(){
+        System.out.println("Option A: Delete All");
+        System.out.println("Option B: Delete Specifc Name and Mark");
+        System.out.print("\nInput: ");
+    }
 
     
     public static void main(String[] args) {
@@ -78,7 +108,7 @@ public class A4_Marks {
        
         //runs program while true
         while (run){
-        menu(); //runs menu method to print the main menu
+        mainMenu(); //runs menu method to print the main menu
         input=x.nextLine(); //collects user input
         
         //Add marks and names program when 1 is inputted
@@ -89,33 +119,17 @@ public class A4_Marks {
         
         //Print program when 2 is inputted
         else if (input.equals("2")||input.equals("two")||input.equals("Two")){ 
-            int tot=0;
-            int amount,max=0,min=100;
-            
-            // for loop that runs the length of indexes stored
-            for (int i=0;i<names.size();i++){
-                //gets total sum of all marks
-                tot=(marks.get(i))+tot;
-                //finds the max and min mark
-                if (max<marks.get(i)){
-                    max=marks.get(i);
-                }
-                else if(min>marks.get(i)){
-                    min=marks.get(i);
-                }
-            }
-            //finds number of indexes in array
-            amount = names.size();
+            int amount= names.size();//finds number of indexes in array;
             
             //prints name, marks above or below average for all users stored in array for
             System.out.println("Name    Mark    Verdict");
             for (int i=0;i<names.size();i++){
-                System.out.format("\n%-8.8s %2d %-14s",names.get(i),marks.get(i),UpDown(marks.get(i),Average(tot,amount)));
+                System.out.format("\n%-8.8s %2d %-14s",names.get(i),marks.get(i),UpDown(marks.get(i),Average(Sum(marks),amount)));
             }
             //prints average mark
-            System.out.println("\nAverage mark is "+Average(tot,amount));
+            System.out.println("\nAverage mark is "+Average(Sum(marks),amount));
             //prints min and max mark
-            System.out.format("Maximum mark was %d and Minimum mark was %d\n",max,min);
+            System.out.format("Maximum mark was %d and Minimum mark was %d\n",Max(marks),Min(marks));
         }
         
         //Delete program runs when 3 is inputted
@@ -125,13 +139,22 @@ public class A4_Marks {
             for (int i=0; i<names.size();i++){
                 System.out.format("%-8.8s %6d %8d\n",names.get(i),marks.get(i),i);
             }
-            //double checks with the user if they want to delete all names and marks by pressing y
-            System.out.println("Are you sure you want to delete all, type \"y\" to confirm");
+            //Asks user if they want to delete all or a specific one
+            deleteMenu();
             input=x.nextLine();
             
-            if (input.equals("y")||input.equals("Y")){
+            if (input.equals("A")||input.equals("a")){
                 names.clear(); //clears names arraylist
                 marks.clear(); //clears marks arraylist
+                System.out.println("Cleared");
+            }
+            else if (input.equals("B")||input.equals("b")){
+                System.out.print("Enter Index #: ");
+                input=x.nextLine();
+                
+                names.remove(Integer.parseInt(input));
+                marks.remove(Integer.parseInt(input));
+                
                 System.out.println("Cleared");
             }
         }
@@ -140,8 +163,7 @@ public class A4_Marks {
             System.out.println("Name     Mark");
             for (int i=0;i<names.size();i++){ //runs for the length of the number of items stored
                 System.out.format("%-8.8s", names.get(i));//prints name
-                System.out.print(Graph(marks.get(i))); //calls program Graph to print the * required
-                System.out.println(" "+marks.get(i)); //prints mark
+                System.out.print(Graph(marks.get(i))+" "+marks.get(i)+"\n"); //calls program Graph to print the * required as well as mark
             }
         }
         //Search program when 5 is inputted
